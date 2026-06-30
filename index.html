@@ -102,6 +102,95 @@
     transition: color .2s ease, border-color .2s ease;
   }
   nav.shelf a:hover{ color:var(--gold-bright); border-color:var(--gold-bright); }
+  nav.shelf a.active{ color:var(--gold-bright); border-color:var(--gold-bright); }
+
+  /* ===== Reading progress ===== */
+  .progress-rail{
+    position:fixed; top:0; left:0; width:100%; height:3px;
+    background:rgba(0,0,0,0.2); z-index:200;
+  }
+  .progress-fill{
+    height:100%; width:0%;
+    background: linear-gradient(90deg, var(--oxblood), var(--gold-bright));
+    transition: width .08s linear;
+  }
+
+  /* ===== Catalog controls (search + filters) ===== */
+  .catalog-controls{
+    display:flex; flex-wrap:wrap; gap:14px;
+    align-items:center; justify-content:space-between;
+    margin-bottom:30px;
+    padding-bottom:22px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .filter-tabs{ display:flex; flex-wrap:wrap; gap:8px; }
+  .filter-tabs button{
+    font-family:'Cinzel', serif;
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    background:transparent;
+    border:1px solid var(--ink-soft);
+    color:var(--ink-soft);
+    padding:7px 14px;
+    cursor:pointer;
+    transition: all .18s ease;
+  }
+  .filter-tabs button:hover{ border-color:var(--oxblood); color:var(--oxblood); }
+  .filter-tabs button.active{
+    background:var(--oxblood); border-color:var(--oxblood); color:var(--paper);
+  }
+
+  .catalog-search{
+    position:relative;
+    flex: 1 1 220px;
+    max-width:280px;
+  }
+  .catalog-search input{
+    width:100%;
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    background: var(--paper-dark);
+    border:1px solid var(--ink-soft);
+    color:var(--ink);
+    padding:9px 14px 9px 32px;
+    outline:none;
+  }
+  .catalog-search input:focus{ border-color:var(--oxblood); }
+  .catalog-search::before{
+    content:"☙";
+    position:absolute; left:10px; top:50%; transform:translateY(-50%);
+    color:var(--ink-soft); font-size:14px; pointer-events:none;
+  }
+  .catalog-empty{
+    display:none;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--ink-soft);
+    text-align:center;
+    padding:40px 0;
+  }
+  .catalog-empty.show{ display:block; }
+
+  .card.hidden-card{ display:none; }
+
+  /* ===== Back to top ===== */
+  .back-to-top{
+    position:fixed; bottom:26px; right:26px;
+    width:52px; height:52px;
+    background: var(--wood);
+    border: 2px solid var(--gold);
+    color: var(--paper-dark);
+    font-family:'Cinzel', serif;
+    font-size:18px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    opacity:0; visibility:hidden; transform: translateY(10px);
+    transition: opacity .25s ease, transform .25s ease, background .2s ease;
+    z-index:150;
+  }
+  .back-to-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+  .back-to-top:hover{ background:var(--oxblood); }
 
   /* ===== Layout ===== */
   main{ max-width: 920px; margin: 0 auto; padding: 0 24px; }
@@ -179,13 +268,6 @@
   /* ===== Card catalog (post index) ===== */
   .catalog{
     display:grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
-  }
-  @media (max-width:680px){ .catalog{ grid-template-columns: 1fr; } }
-
-  .catalog{
-    display:grid;
     grid-template-columns: 1fr;
     gap: 22px;
   }
@@ -196,7 +278,9 @@
     box-shadow: 3px 3px 0 var(--rule);
     position:relative;
     color:var(--ink);
+    transition: box-shadow .2s ease;
   }
+  .card:hover{ box-shadow: 5px 5px 0 var(--gold); }
 
   .card summary{
     list-style:none;
@@ -253,9 +337,18 @@
   }
 
   .card .full-text{
+    overflow:hidden;
+    max-height:0;
+    padding:0 22px;
+    margin-top:0;
+    opacity:0;
+    transition: max-height .4s ease, opacity .3s ease;
+  }
+  .card[open] .full-text{
     padding: 4px 22px 28px 22px;
     border-top: 1px dashed var(--rule);
     margin-top: 6px;
+    opacity:1;
   }
   .card .full-text p{
     font-size:16.5px;
@@ -320,14 +413,16 @@
 </head>
 <body>
 
+<div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+
 <header class="masthead">
   <div class="eyebrow">Est. MMXXVI · A Personal Archive</div>
   <h1 class="site-title">The Reading Room</h1>
   <div class="site-sub">essays, marginalia, and notes from a desk by the window</div>
-  <nav class="shelf">
-    <a href="#writings">Writings</a>
-    <a href="#about">About</a>
-    <a href="#contact">Correspondence</a>
+  <nav class="shelf" id="shelfNav">
+    <a href="#writings" data-section="writings">Writings</a>
+    <a href="#about" data-section="about">About</a>
+    <a href="#contact" data-section="contact">Correspondence</a>
   </nav>
 </header>
 
@@ -354,9 +449,21 @@
     <div class="section-label">The Catalog</div>
     <h2 class="section-title">Writings</h2>
 
-    <div class="catalog">
+    <div class="catalog-controls">
+      <div class="filter-tabs" id="filterTabs">
+        <button data-filter="all" class="active">All</button>
+        <button data-filter="essay">Essay</button>
+        <button data-filter="notes">Notes</button>
+        <button data-filter="review">Review</button>
+      </div>
+      <div class="catalog-search">
+        <input type="text" id="catalogSearch" placeholder="Search the catalog…">
+      </div>
+    </div>
 
-      <details class="card">
+    <div class="catalog" id="catalogGrid">
+
+      <details class="card" data-category="essay">
         <summary>
           <span class="tab">Essay</span>
           <div class="call-number">No. 001 &middot; PHIL—230</div>
@@ -371,7 +478,7 @@
         </div>
       </details>
 
-      <details class="card">
+      <details class="card" data-category="notes">
         <summary>
           <span class="tab">Notes</span>
           <div class="call-number">No. 002 &middot; HIST—118</div>
@@ -384,7 +491,7 @@
         </div>
       </details>
 
-      <details class="card">
+      <details class="card" data-category="essay">
         <summary>
           <span class="tab">Essay</span>
           <div class="call-number">No. 003 &middot; LING—304</div>
@@ -397,7 +504,7 @@
         </div>
       </details>
 
-      <details class="card">
+      <details class="card" data-category="review">
         <summary>
           <span class="tab">Review</span>
           <div class="call-number">No. 004 &middot; CRIT—092</div>
@@ -411,6 +518,8 @@
       </details>
 
     </div>
+
+    <p class="catalog-empty" id="catalogEmpty">No entries match your search of the shelves.</p>
   </section>
 
   <section id="about">
@@ -442,6 +551,101 @@
   <div class="stamp">Reading Room</div>
   <div>Personal Archive &middot; Built one entry at a time</div>
 </footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Return to top">↑</button>
+
+<script>
+  // Reading progress bar
+  const progressFill = document.getElementById('progressFill');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = h.scrollTop;
+    const max = h.scrollHeight - h.clientHeight;
+    progressFill.style.width = (max > 0 ? (scrolled / max) * 100 : 0) + '%';
+  }
+  document.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  // Back to top button
+  const backToTop = document.getElementById('backToTop');
+  document.addEventListener('scroll', () => {
+    backToTop.classList.toggle('show', window.scrollY > 500);
+  });
+  backToTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  // Scrollspy nav
+  const navLinks = document.querySelectorAll('#shelfNav a');
+  const sections = ['writings','about','contact'].map(id => document.getElementById(id));
+  function updateNav(){
+    let current = sections[0].id;
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 140) current = sec.id;
+    });
+    navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === current));
+  }
+  document.addEventListener('scroll', updateNav);
+  updateNav();
+
+  // Smooth expand/collapse for catalog cards
+  document.querySelectorAll('.card').forEach(card => {
+    const summary = card.querySelector('summary');
+    const body = card.querySelector('.full-text');
+    summary.addEventListener('click', e => {
+      e.preventDefault();
+      const isOpen = card.hasAttribute('open');
+      if (isOpen){
+        body.style.maxHeight = body.scrollHeight + 'px';
+        requestAnimationFrame(() => { body.style.maxHeight = '0px'; });
+        body.addEventListener('transitionend', function handler(){
+          card.removeAttribute('open');
+          body.removeEventListener('transitionend', handler);
+        }, {once:true});
+      } else {
+        card.setAttribute('open', '');
+        body.style.maxHeight = '0px';
+        requestAnimationFrame(() => { body.style.maxHeight = body.scrollHeight + 'px'; });
+        body.addEventListener('transitionend', function handler(){
+          body.style.maxHeight = 'none';
+          body.removeEventListener('transitionend', handler);
+        }, {once:true});
+      }
+    });
+  });
+
+  // Filter by category
+  const filterTabs = document.getElementById('filterTabs');
+  const allCards = Array.from(document.querySelectorAll('.card'));
+  const emptyMsg = document.getElementById('catalogEmpty');
+  let activeFilter = 'all';
+  let searchTerm = '';
+
+  function applyFilters(){
+    let visibleCount = 0;
+    allCards.forEach(card => {
+      const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
+      const title = card.querySelector('h4').textContent.toLowerCase();
+      const summary = card.querySelector('summary p').textContent.toLowerCase();
+      const matchesSearch = !searchTerm || title.includes(searchTerm) || summary.includes(searchTerm);
+      const show = matchesFilter && matchesSearch;
+      card.classList.toggle('hidden-card', !show);
+      if (show) visibleCount++;
+    });
+    emptyMsg.classList.toggle('show', visibleCount === 0);
+  }
+
+  filterTabs.addEventListener('click', e => {
+    if (e.target.tagName !== 'BUTTON') return;
+    filterTabs.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    activeFilter = e.target.dataset.filter;
+    applyFilters();
+  });
+
+  document.getElementById('catalogSearch').addEventListener('input', e => {
+    searchTerm = e.target.value.trim().toLowerCase();
+    applyFilters();
+  });
+</script>
 
 </body>
 </html>
