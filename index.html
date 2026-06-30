@@ -184,17 +184,49 @@
   }
   @media (max-width:680px){ .catalog{ grid-template-columns: 1fr; } }
 
+  .catalog{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
   .card{
     background: var(--paper);
     border: 1px solid var(--ink);
     box-shadow: 3px 3px 0 var(--rule);
-    padding: 20px 20px 22px;
     position:relative;
-    text-decoration:none;
     color:var(--ink);
-    transition: transform .18s ease, box-shadow .18s ease;
   }
-  .card:hover{ transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--gold); }
+
+  .card summary{
+    list-style:none;
+    cursor:pointer;
+    padding: 20px 50px 22px 20px;
+    position:relative;
+    transition: background .15s ease;
+  }
+  .card summary::-webkit-details-marker{ display:none; }
+  .card summary:hover{ background: rgba(168,130,60,0.08); }
+  .card summary::after{
+    content:"+";
+    position:absolute;
+    top:18px; right:18px;
+    font-family:'Cinzel', serif;
+    font-size:22px;
+    color:var(--oxblood);
+    width:30px; height:30px;
+    border:1px solid var(--oxblood);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
+    transition: transform .2s ease, background .2s ease, color .2s ease;
+  }
+  .card[open] summary::after{
+    content:"−";
+    background: var(--oxblood);
+    color: var(--paper);
+  }
+
   .card .tab{
     position:absolute; top:-10px; left:18px;
     background:var(--oxblood); color:var(--paper);
@@ -219,6 +251,19 @@
     border-top:1px dotted var(--rule); padding-top:10px;
     display:flex; justify-content:space-between;
   }
+
+  .card .full-text{
+    padding: 4px 22px 28px 22px;
+    border-top: 1px dashed var(--rule);
+    margin-top: 6px;
+  }
+  .card .full-text p{
+    font-size:16.5px;
+    line-height:1.75;
+    color:var(--ink);
+    margin: 0 0 16px;
+  }
+  .card .full-text p:first-child{ margin-top:16px; }
 
   /* ===== About ===== */
   .about-grid{
@@ -311,37 +356,59 @@
 
     <div class="catalog">
 
-      <a class="card" href="#">
-        <span class="tab">Essay</span>
-        <div class="call-number">No. 001 &middot; PHIL—230</div>
-        <h4>On Reading Slowly in a Fast Library</h4>
-        <p>A first essay on why close reading still matters when everything is built for skimming. Swap this for your actual opening piece.</p>
-        <div class="meta"><span>3 Jan 2026</span><span>8 min</span></div>
-      </a>
+      <details class="card">
+        <summary>
+          <span class="tab">Essay</span>
+          <div class="call-number">No. 001 &middot; PHIL—230</div>
+          <h4>On Reading Slowly in a Fast Library</h4>
+          <p>A first essay on why close reading still matters when everything is built for skimming. Swap this for your actual opening piece.</p>
+          <div class="meta"><span>3 Jan 2026</span><span>8 min</span></div>
+        </summary>
+        <div class="full-text">
+          <p>This is where the full essay goes. Replace this paragraph and the ones below with your actual writing &mdash; when you click the card now, it opens up right here on the page instead of taking you anywhere else.</p>
+          <p>Keep adding paragraphs like this one for as long as the piece needs. Each <code>&lt;p&gt;</code> tag is one paragraph of the essay.</p>
+          <p>When you're ready to add a new post, copy this whole <code>&lt;details class="card"&gt;...&lt;/details&gt;</code> block, paste it above or below, and swap in the new title, summary, and text.</p>
+        </div>
+      </details>
 
-      <a class="card" href="#">
-        <span class="tab">Notes</span>
-        <div class="call-number">No. 002 &middot; HIST—118</div>
-        <h4>Marginalia: A Reading Log, January</h4>
-        <p>Short notes on what I read this month and what stuck. A placeholder for your ongoing reading journal entries.</p>
-        <div class="meta"><span>28 Jan 2026</span><span>5 min</span></div>
-      </a>
+      <details class="card">
+        <summary>
+          <span class="tab">Notes</span>
+          <div class="call-number">No. 002 &middot; HIST—118</div>
+          <h4>Marginalia: A Reading Log, January</h4>
+          <p>Short notes on what I read this month and what stuck. A placeholder for your ongoing reading journal entries.</p>
+          <div class="meta"><span>28 Jan 2026</span><span>5 min</span></div>
+        </summary>
+        <div class="full-text">
+          <p>Full reading log goes here. You can keep this format loose and short &mdash; a few lines per book or article, rather than a polished essay.</p>
+        </div>
+      </details>
 
-      <a class="card" href="#">
-        <span class="tab">Essay</span>
-        <div class="call-number">No. 003 &middot; LING—304</div>
-        <h4>Working Title: The Idea I Keep Returning To</h4>
-        <p>The seed of a bigger argument, the kind of piece that might become a writing sample later. Replace with real content when ready.</p>
-        <div class="meta"><span>14 Feb 2026</span><span>11 min</span></div>
-      </a>
+      <details class="card">
+        <summary>
+          <span class="tab">Essay</span>
+          <div class="call-number">No. 003 &middot; LING—304</div>
+          <h4>Working Title: The Idea I Keep Returning To</h4>
+          <p>The seed of a bigger argument, the kind of piece that might become a writing sample later. Replace with real content when ready.</p>
+          <div class="meta"><span>14 Feb 2026</span><span>11 min</span></div>
+        </summary>
+        <div class="full-text">
+          <p>Full essay text goes here.</p>
+        </div>
+      </details>
 
-      <a class="card" href="#">
-        <span class="tab">Review</span>
-        <div class="call-number">No. 004 &middot; CRIT—092</div>
-        <h4>On a Book That Changed How I Read</h4>
-        <p>A review-essay placeholder &mdash; useful for showing range alongside more formal academic writing.</p>
-        <div class="meta"><span>2 Mar 2026</span><span>7 min</span></div>
-      </a>
+      <details class="card">
+        <summary>
+          <span class="tab">Review</span>
+          <div class="call-number">No. 004 &middot; CRIT—092</div>
+          <h4>On a Book That Changed How I Read</h4>
+          <p>A review-essay placeholder &mdash; useful for showing range alongside more formal academic writing.</p>
+          <div class="meta"><span>2 Mar 2026</span><span>7 min</span></div>
+        </summary>
+        <div class="full-text">
+          <p>Full review text goes here.</p>
+        </div>
+      </details>
 
     </div>
   </section>
