@@ -3,1169 +3,456 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Being Beyond — Personal Blog</title>
+<title>Anupam Mahatra — The Metaphysical Status of Reality</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ─── TOKENS ─────────────────────────────────── */
-:root {
-  --paper:      #EDE3C8;
-  --paper-mid:  #E0D4B0;
-  --paper-dark: #C8BB96;
-  --ink:        #1E1710;
-  --ink-soft:   #4A3E2E;
-  --ink-faint:  #8A7A62;
-  --wood:       #2E1F0F;
-  --wood-mid:   #3D2B15;
-  --oxblood:    #5C1F22;
-  --oxblood-hi: #7A2A2E;
-  --gold:       #9E7830;
-  --gold-hi:    #C49A3C;
-  --gold-pale:  #D4B06A;
-  --rule:       rgba(30,23,16,.18);
-  --rule-soft:  rgba(30,23,16,.08);
-  --shadow:     rgba(0,0,0,.22);
-  --radius:     2px;
-  --transition: .28s cubic-bezier(.4,0,.2,1);
+:root{
+  --paper:#FAF8F3; --paper-dim:#F1ECE0; --paper-line:#E7E0D0;
+  --ink:#17181C; --ink-soft:#464851; --ink-faint:#8B8D97;
+  --accent:#223A5E; --accent-hi:#31517F;
+  --brass:#8B5E22; --brass-hi:#A87530;
+  --rule:rgba(23,24,28,.14); --rule-soft:rgba(23,24,28,.08);
+  --radius:1px;
 }
-[data-theme="dark"] {
-  --paper:      #16100A;
-  --paper-mid:  #201710;
-  --paper-dark: #2A1E14;
-  --ink:        #E8DEC8;
-  --ink-soft:   #B8AC96;
-  --ink-faint:  #786A52;
-  --wood:       #0A0704;
-  --wood-mid:   #130D07;
-  --oxblood:    #8C3036;
-  --oxblood-hi: #A83A42;
-  --gold:       #A88030;
-  --gold-hi:    #C8A040;
-  --gold-pale:  #906A24;
-  --rule:       rgba(232,222,200,.12);
-  --rule-soft:  rgba(232,222,200,.06);
-  --shadow:     rgba(0,0,0,.5);
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:17px}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:'Spectral',serif; line-height:1.65;
+}
+a{color:inherit; text-decoration:none}
+.mono{font-family:'IBM Plex Mono',monospace}
+::selection{background:var(--brass); color:var(--paper)}
+
+/* ── MASTHEAD ─────────────────────────────── */
+header{
+  border-bottom:3px double var(--ink);
+  padding:20px clamp(20px,5vw,56px) 16px;
+}
+.masthead-row{
+  display:flex; justify-content:space-between; align-items:baseline;
+  flex-wrap:wrap; gap:8px 20px;
+}
+.masthead-name{
+  font-weight:600; font-size:20px; letter-spacing:.01em;
+}
+.masthead-tag{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.04em;
+  color:var(--ink-faint); text-transform:uppercase;
+}
+nav{
+  display:flex; gap:22px; flex-wrap:wrap;
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--rule);
+}
+nav a{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.03em;
+  color:var(--ink-soft); text-transform:uppercase;
+  border-bottom:1px solid transparent; padding-bottom:2px;
+  transition:color .2s, border-color .2s;
+}
+nav a:hover{ color:var(--accent); border-color:var(--accent); }
+
+/* ── QUOTE SLIDER ──────────────────────────── */
+#quotes{
+  background:var(--ink); color:var(--paper);
+  padding:0; overflow:hidden; position:relative;
+  border-bottom:3px double var(--brass);
+}
+.quote-track{
+  display:flex; transition:transform .5s cubic-bezier(.65,0,.35,1);
+}
+.quote-slide{
+  min-width:100%; padding:44px clamp(20px,5vw,56px);
+  display:flex; flex-direction:column; align-items:flex-start;
+}
+.quote-mark{ font-family:'Spectral',serif; font-size:44px; color:var(--brass-hi); line-height:.5; margin-bottom:10px; }
+.quote-text{
+  font-family:'Spectral',serif; font-style:italic; font-weight:400;
+  font-size:clamp(19px,2.4vw,26px); line-height:1.45; max-width:760px;
+}
+.quote-attr{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--brass-hi); margin-top:16px;
+}
+.quote-attr span{ color:rgba(250,248,243,.5); text-transform:none; letter-spacing:0; }
+.quote-controls{
+  position:absolute; bottom:16px; right:clamp(20px,5vw,56px);
+  display:flex; gap:10px; align-items:center;
+}
+.quote-dot{
+  width:7px; height:7px; border-radius:50%; background:rgba(250,248,243,.3);
+  cursor:pointer; transition:background .2s;
+}
+.quote-dot.active{ background:var(--brass-hi); }
+.quote-nav{
+  font-family:'IBM Plex Mono',monospace; font-size:14px; color:rgba(250,248,243,.6);
+  cursor:pointer; padding:0 4px; transition:color .2s;
+}
+.quote-nav:hover{ color:var(--brass-hi); }
+
+/* ── INTRO STRIP ──────────────────────────── */
+#intro{
+  padding:52px clamp(20px,5vw,56px) 40px;
+  max-width:760px;
+}
+#intro .eyebrow{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--brass); margin-bottom:14px;
+}
+#intro h1{
+  font-weight:500; font-size:clamp(26px,3.4vw,36px); line-height:1.3;
+  margin-bottom:18px;
+}
+#intro h1 em{ font-style:italic; color:var(--accent); font-weight:400; }
+#intro p{ font-size:16.5px; color:var(--ink-soft); margin-bottom:14px; max-width:640px; }
+#intro p:last-child{ margin-bottom:0; }
+
+/* ── SECTION SCAFFOLDING ──────────────────── */
+section{ padding:0 clamp(20px,5vw,56px) 64px; }
+.sec-head{
+  display:flex; align-items:baseline; gap:14px;
+  border-bottom:1px solid var(--ink); padding-bottom:10px; margin-bottom:28px;
+}
+.sec-num{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--brass); }
+.sec-title{ font-weight:600; font-size:22px; }
+.sec-sub{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
+  margin-left:auto; text-transform:uppercase; letter-spacing:.04em;
 }
 
-/* ─── RESET ──────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 17px; }
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: 'EB Garamond', serif;
-  line-height: 1.7;
-  min-height: 100vh;
-  transition: background var(--transition), color var(--transition);
-  background-image:
-    radial-gradient(ellipse at 80% 0%, rgba(158,120,48,.06) 0%, transparent 60%),
-    repeating-linear-gradient(0deg,
-      rgba(30,23,16,.012) 0px, rgba(30,23,16,.012) 1px,
-      transparent 1px, transparent 28px);
+/* ── CATEGORY FILTER ──────────────────────── */
+.cat-bar{
+  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px;
 }
-::selection { background: var(--gold-hi); color: var(--wood); }
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.cat-btn{
+  font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.03em;
+  padding:7px 14px; border:1px solid var(--rule); color:var(--ink-soft);
+  background:var(--paper); cursor:pointer; transition:all .2s;
+}
+.cat-btn:hover{ border-color:var(--ink); color:var(--ink); }
+.cat-btn.active{ background:var(--ink); border-color:var(--ink); color:var(--paper); }
 
-/* ─── PROGRESS BAR ───────────────────────────── */
-#progress-bar {
-  position: fixed; top: 0; left: 0; z-index: 999;
-  height: 2px; width: 0%;
-  background: linear-gradient(90deg, var(--oxblood), var(--gold-hi));
-  transition: width .1s linear;
-  pointer-events: none;
+/* ── PAPER LISTING (signature element) ────── */
+.listing{ display:flex; flex-direction:column; }
+.paper{
+  display:grid; grid-template-columns:120px 1fr; gap:24px;
+  padding:22px 0; border-top:1px solid var(--rule-soft);
+  transition:background .2s;
 }
-
-/* ─── NAV ────────────────────────────────────── */
-#site-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 clamp(20px, 5vw, 60px);
-  height: 62px;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+.paper-empty{
+  border:1px dashed var(--rule); padding:40px 30px; text-align:center;
+  font-style:italic; color:var(--ink-faint); font-size:16px;
 }
-#site-nav.scrolled {
-  background: var(--wood);
-  border-color: var(--gold);
-  box-shadow: 0 4px 20px var(--shadow);
+.paper:first-child{ border-top:none; }
+.paper.hidden{ display:none; }
+.paper-id{
+  font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--brass);
+  padding-top:2px;
 }
-.nav-brand {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  letter-spacing: .12em;
-  color: var(--paper);
-  opacity: 0; transition: opacity var(--transition);
+.paper-id span{ display:block; color:var(--ink-faint); font-size:10.5px; margin-top:6px; }
+.paper-tag{
+  display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--accent);
+  border:1px solid var(--accent); padding:2px 8px; margin-bottom:10px;
 }
-#site-nav.scrolled .nav-brand { opacity: 1; }
-.nav-links {
-  display: flex; align-items: center; gap: 32px;
-  list-style: none;
+.paper-tag.status-draft{ color:var(--brass); border-color:var(--brass); }
+.paper-tag.status-planned{ color:var(--ink-faint); border-color:var(--rule); }
+.paper-title{ font-weight:600; font-size:19px; margin-bottom:8px; line-height:1.3; }
+.paper-abstract{ font-size:15px; color:var(--ink-soft); margin-bottom:10px; max-width:620px; }
+.paper-meta{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);
+  display:flex; gap:16px; flex-wrap:wrap;
 }
-.nav-links a {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--paper-dark);
-  padding-bottom: 2px;
-  border-bottom: 1px solid transparent;
-  transition: color var(--transition), border-color var(--transition);
+.paper-toggle{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent);
+  cursor:pointer; border-bottom:1px dotted var(--accent);
 }
-#site-nav:not(.scrolled) .nav-links a { color: var(--paper); }
-.nav-links a:hover,
-.nav-links a.active { color: var(--gold-hi); border-color: var(--gold-hi); }
-.nav-right { display: flex; align-items: center; gap: 16px; }
-#theme-toggle {
-  width: 34px; height: 34px;
-  border: 1px solid var(--gold);
-  color: var(--gold-hi);
-  font-size: 15px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  transition: background var(--transition), color var(--transition);
+.paper-detail{
+  max-height:0; overflow:hidden; opacity:0;
+  transition:max-height .4s ease, opacity .3s ease;
 }
-#theme-toggle:hover { background: var(--gold); color: var(--wood); }
-.hamburger {
-  display: none; flex-direction: column; gap: 5px;
-  width: 28px;
+.paper-detail.open{ max-height:600px; opacity:1; margin-top:14px; }
+.paper-detail-block{ margin-bottom:12px; }
+.paper-detail-label{
+  font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--brass); display:block; margin-bottom:4px;
 }
-.hamburger span {
-  display: block; height: 1px;
-  background: var(--paper);
-  transition: transform var(--transition), opacity var(--transition);
-}
-@media (max-width: 700px) {
-  .nav-links { display: none; position: absolute; top: 62px; left: 0; right: 0;
-    background: var(--wood); flex-direction: column; padding: 24px 32px;
-    border-bottom: 2px solid var(--gold); gap: 20px; }
-  .nav-links.open { display: flex; }
-  .hamburger { display: flex; }
+.paper-detail p{ font-size:14.5px; color:var(--ink-soft); line-height:1.7; }
+@media (max-width:600px){
+  .paper{ grid-template-columns:1fr; gap:6px; }
 }
 
-/* ─── HERO ───────────────────────────────────── */
-#hero {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: 120px clamp(24px, 8vw, 120px) 80px;
-  position: relative;
-  background:
-    radial-gradient(ellipse at 50% 30%, rgba(158,120,48,.12), transparent 70%),
-    linear-gradient(175deg, var(--wood) 0%, var(--wood-mid) 55%, var(--paper-dark) 100%);
-  overflow: hidden;
+/* ── READING LOG ──────────────────────────── */
+.log-list{ display:flex; flex-direction:column; gap:0; }
+.log-item{
+  display:grid; grid-template-columns:100px 1fr; gap:20px;
+  padding:16px 0; border-top:1px solid var(--rule-soft);
 }
-#hero::before {
-  content: "";
-  position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(158,120,48,.04) 0px, rgba(158,120,48,.04) 1px, transparent 1px, transparent 120px),
-    repeating-linear-gradient(0deg, rgba(158,120,48,.04) 0px, rgba(158,120,48,.04) 1px, transparent 1px, transparent 120px);
-  pointer-events: none;
+.log-item:first-child{ border-top:none; }
+.log-date{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint); padding-top:2px; }
+.log-source{ font-weight:600; font-size:15.5px; margin-bottom:4px; }
+.log-note{ font-size:14.5px; color:var(--ink-soft); }
+@media (max-width:600px){ .log-item{ grid-template-columns:1fr; gap:4px; } }
+
+/* ── ABOUT ─────────────────────────────────── */
+.about-grid{ display:grid; grid-template-columns:1fr 260px; gap:48px; }
+.about-grid p{ font-size:16px; color:var(--ink-soft); margin-bottom:16px; max-width:600px; }
+.about-side{
+  border:1px solid var(--rule); padding:20px; font-family:'IBM Plex Mono',monospace;
+  font-size:12px; color:var(--ink-soft); height:fit-content;
 }
-.hero-eyebrow {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: .35em;
-  text-transform: uppercase;
-  color: var(--gold-pale);
-  margin-bottom: 22px;
-}
-.hero-title {
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  font-size: clamp(48px, 9vw, 96px);
-  line-height: 1.05;
-  color: var(--paper);
-  letter-spacing: .03em;
-  text-shadow: 0 4px 24px rgba(0,0,0,.4);
-  margin-bottom: 24px;
-}
-.hero-title em {
-  font-style: italic;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 300;
-  color: var(--gold-pale);
-}
-.hero-tagline {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: clamp(18px, 2.5vw, 24px);
-  color: var(--paper-mid);
-  max-width: 560px;
-  margin: 0 auto 44px;
-  line-height: 1.6;
-}
-.hero-cta {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: 'Cinzel', serif;
-  font-size: 12px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--paper);
-  border: 1px solid var(--gold);
-  padding: 13px 28px;
-  transition: background var(--transition), color var(--transition);
-}
-.hero-cta:hover { background: var(--gold); color: var(--wood); }
-.hero-scroll-hint {
-  position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--paper-dark); opacity: .6;
-  animation: bob 2.5s ease-in-out infinite;
-}
-.hero-scroll-hint::after {
-  content: "↓";
-  font-size: 16px;
-}
-@keyframes bob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
-/* Vertical decorative lines */
-#hero::after {
-  content: "";
-  position: absolute; top: 0; bottom: 0; left: 50%;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(158,120,48,.25) 30%, rgba(158,120,48,.25) 70%, transparent);
-  pointer-events: none;
+.about-side-row{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px dotted var(--rule); }
+.about-side-row:first-child{ border-top:none; }
+.about-side-row a{ color:var(--accent); }
+@media (max-width:700px){ .about-grid{ grid-template-columns:1fr; } }
+
+/* ── CONTACT ───────────────────────────────── */
+#contact p{ font-size:16px; color:var(--ink-soft); margin-bottom:18px; max-width:560px; }
+.contact-email{
+  font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--accent);
+  border-bottom:1px solid var(--accent); padding-bottom:2px;
 }
 
-/* ─── LAYOUT ─────────────────────────────────── */
-.site-body {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 5vw, 60px);
-}
-section { padding: 90px 0; }
-section + section { border-top: 1px solid var(--rule); }
-
-.section-header { margin-bottom: 52px; }
-.section-eyebrow {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: .3em;
-  text-transform: uppercase;
-  color: var(--oxblood);
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 10px;
-}
-.section-eyebrow::after {
-  content: "";
-  flex: 1; height: 1px;
-  background: linear-gradient(90deg, var(--oxblood), transparent);
-  opacity: .4;
-}
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  font-size: clamp(32px, 4vw, 48px);
-  line-height: 1.15;
-  color: var(--ink);
-}
-
-/* ─── SAYINGS ─────────────────────────────────── */
-#sayings { background: var(--paper-mid); }
-.saying-carousel { position: relative; overflow: hidden; }
-.saying-track {
-  display: flex;
-  transition: transform .55s cubic-bezier(.4,0,.2,1);
-}
-.saying-slide {
-  min-width: 100%;
-  padding: 52px 40px;
-  text-align: center;
-}
-.saying-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: clamp(22px, 3.5vw, 36px);
-  line-height: 1.5;
-  color: var(--ink);
-  max-width: 720px;
-  margin: 0 auto 22px;
-  position: relative;
-}
-.saying-text::before {
-  content: "\201C";
-  font-size: 100px;
-  font-family: 'Cormorant Garamond', serif;
-  color: var(--gold);
-  opacity: .25;
-  position: absolute;
-  top: -30px; left: -20px;
-  line-height: 1;
-  pointer-events: none;
-}
-.saying-lang {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-.saying-nav {
-  display: flex; justify-content: center; gap: 10px; margin-top: 28px;
-}
-.saying-dot {
-  width: 8px; height: 8px;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background var(--transition);
-}
-.saying-dot.active { background: var(--gold); }
-.saying-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  font-family: 'Cinzel', serif;
-  font-size: 18px;
-  color: var(--ink-faint);
-  width: 40px; height: 40px;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--rule);
-  transition: all var(--transition);
-  z-index: 2;
-}
-.saying-arrow:hover { border-color: var(--gold); color: var(--gold); }
-.saying-arrow.prev { left: 10px; }
-.saying-arrow.next { right: 10px; }
-
-/* ─── BLOG POSTS ──────────────────────────────── */
-.blog-controls {
-  display: flex; flex-wrap: wrap; gap: 12px;
-  align-items: center; justify-content: space-between;
-  margin-bottom: 40px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--rule);
-}
-.filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
-.filter-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 10.5px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  border: 1px solid var(--rule);
-  color: var(--ink-faint);
-  padding: 7px 16px;
-  border-radius: var(--radius);
-  transition: all var(--transition);
-}
-.filter-btn:hover { border-color: var(--oxblood); color: var(--oxblood); }
-.filter-btn.active { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); }
-.search-box {
-  position: relative;
-  flex: 1 1 200px; max-width: 260px;
-}
-.search-box input {
-  width: 100%;
-  font-family: 'EB Garamond', serif;
-  font-size: 15px;
-  font-style: italic;
-  background: var(--paper-mid);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  padding: 9px 14px 9px 34px;
-  outline: none;
-  border-radius: var(--radius);
-  transition: border-color var(--transition);
-}
-.search-box input:focus { border-color: var(--oxblood); }
-.search-box::before {
-  content: "☙";
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--ink-faint); font-size: 13px; pointer-events: none;
-}
-
-/* Featured post */
-.featured-post {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border: 1px solid var(--ink);
-  box-shadow: 5px 5px 0 var(--rule);
-  margin-bottom: 36px;
-  transition: box-shadow var(--transition), transform var(--transition);
-  cursor: pointer;
-}
-.featured-post:hover {
-  box-shadow: 8px 8px 0 var(--gold);
-  transform: translate(-2px,-2px);
-}
-.featured-image {
-  background:
-    linear-gradient(135deg, var(--wood-mid) 0%, var(--oxblood) 50%, var(--wood) 100%);
-  min-height: 280px;
-  display: flex; align-items: center; justify-content: center;
-  position: relative; overflow: hidden;
-}
-.featured-image-pattern {
-  position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(45deg, rgba(158,120,48,.08) 0, rgba(158,120,48,.08) 1px, transparent 0, transparent 50%);
-  background-size: 20px 20px;
-}
-.featured-image-inner {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(40px, 5vw, 72px);
-  color: rgba(232,222,200,.15);
-  user-select: none;
-  letter-spacing: .05em;
-}
-.featured-body {
-  background: var(--paper);
-  padding: 36px 32px;
-  display: flex; flex-direction: column; justify-content: space-between;
-}
-.featured-tag {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--paper);
-  background: var(--oxblood);
-  padding: 4px 10px;
-  display: inline-block;
-  margin-bottom: 18px;
-}
-.featured-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  font-size: clamp(24px, 3vw, 34px);
-  line-height: 1.2;
-  margin-bottom: 16px;
-  color: var(--ink);
-}
-.featured-excerpt {
-  font-size: 15.5px;
-  color: var(--ink-soft);
-  line-height: 1.7;
-  margin-bottom: 20px;
-  flex: 1;
-}
-.featured-meta {
-  display: flex; justify-content: space-between; align-items: center;
-  font-family: 'Cinzel', serif;
-  font-size: 10.5px;
-  letter-spacing: .08em;
-  color: var(--ink-faint);
-  border-top: 1px dotted var(--rule);
-  padding-top: 14px;
-}
-.read-more-link {
-  color: var(--oxblood);
-  font-style: italic;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  display: inline-flex; align-items: center; gap: 4px;
-}
-.read-more-link::after { content: " →"; }
-@media (max-width: 680px) {
-  .featured-post { grid-template-columns: 1fr; }
-  .featured-image { min-height: 160px; }
-}
-
-/* Post grid */
-.post-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 24px;
-}
-.post-card {
-  border: 1px solid var(--rule);
-  background: var(--paper);
-  position: relative;
-  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
-  overflow: visible;
-}
-.post-card:hover {
-  box-shadow: 5px 5px 0 var(--gold);
-  transform: translate(-2px,-2px);
-  border-color: var(--ink);
-}
-.post-card::after {
-  content: "";
-  position: absolute; top: 0; right: 0;
-  border-style: solid;
-  border-width: 0 18px 18px 0;
-  border-color: transparent var(--gold-hi) transparent transparent;
-  opacity: .7;
-}
-.post-card-header {
-  padding: 22px 22px 0;
-}
-.post-tag {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--oxblood);
-  margin-bottom: 10px;
-  display: block;
-}
-.post-card-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 500;
-  font-size: 21px;
-  line-height: 1.25;
-  margin-bottom: 10px;
-}
-.post-excerpt {
-  font-size: 14.5px;
-  color: var(--ink-soft);
-  line-height: 1.65;
-  padding: 0 22px 18px;
-}
-
-/* ─── Expandable full text ─────────────────── */
-.post-full {
-  max-height: 0; overflow: hidden; opacity: 0;
-  transition: max-height .45s ease, opacity .3s ease;
-  border-top: 1px dashed var(--rule);
-  margin: 0 22px;
-  font-size: 16px;
-  line-height: 1.8;
-  color: var(--ink);
-}
-.post-full.open {
-  max-height: 3000px; opacity: 1;
-  padding: 18px 0 22px;
-}
-.post-full p { margin-bottom: 14px; }
-.post-full p:last-child { margin-bottom: 0; }
-.post-card-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 22px 18px;
-}
-.post-meta {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .07em;
-  color: var(--ink-faint);
-}
-.expand-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 10px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--oxblood);
-  border: 1px solid var(--oxblood);
-  padding: 6px 12px;
-  border-radius: var(--radius);
-  transition: all var(--transition);
-}
-.expand-btn:hover, .expand-btn.open {
-  background: var(--oxblood);
-  color: var(--paper);
-}
-.post-card.hidden { display: none; }
-.no-results {
-  display: none; text-align: center; padding: 60px 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic; font-size: 20px; color: var(--ink-faint);
-  grid-column: 1/-1;
-}
-.no-results.show { display: block; }
-
-/* ─── ABOUT ───────────────────────────────────── */
-.about-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 60px;
-  align-items: start;
-}
-@media (max-width: 700px) { .about-layout { grid-template-columns: 1fr; } }
-.about-portrait {
-  position: sticky; top: 90px;
-}
-.portrait-frame {
-  aspect-ratio: 3/4;
-  border: 8px solid var(--wood-mid);
-  outline: 2px solid var(--gold);
-  outline-offset: 4px;
-  background: linear-gradient(155deg, var(--paper-mid), var(--paper-dark));
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 8px;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: .15em;
-  color: var(--ink-faint);
-  box-shadow: 6px 6px 20px var(--shadow);
-  margin-bottom: 20px;
-}
-.portrait-frame .frame-label {
-  font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
-  border-top: 1px solid var(--rule); padding-top: 10px; margin-top: 4px;
-}
-.ex-libris {
-  border: 1px solid var(--gold);
-  background: var(--paper-mid);
-  padding: 18px 16px;
-  font-size: 13.5px;
-  color: var(--ink-soft);
-}
-.ex-libris::before {
-  content: "EX LIBRIS";
-  display: block;
-  font-family: 'Cinzel', serif;
-  font-size: 10px; letter-spacing: .28em;
-  text-transform: uppercase; text-align: center;
-  color: var(--oxblood); margin-bottom: 12px;
-}
-.ex-libris-row {
-  display: flex; justify-content: space-between;
-  padding: 7px 0;
-  border-top: 1px dotted var(--rule);
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-}
-.ex-libris-row:first-of-type { border-top: none; }
-.about-text p {
-  font-size: 17px;
-  color: var(--ink-soft);
-  line-height: 1.8;
-  margin-bottom: 20px;
-}
-.about-text p:first-child { font-size: 20px; color: var(--ink); }
-.about-text p:first-child::first-letter {
-  font-family: 'Cinzel', serif;
-  font-size: 58px;
-  float: left; line-height: .85;
-  padding: 4px 10px 0 0;
-  color: var(--oxblood);
-}
-.interests {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px;
-}
-.interest-tag {
-  font-family: 'Cinzel', serif;
-  font-size: 10px; letter-spacing: .14em;
-  border: 1px solid var(--rule);
-  color: var(--ink-faint);
-  padding: 5px 12px;
-  border-radius: var(--radius);
-}
-
-/* ─── CONTACT ─────────────────────────────────── */
-#contact { background: var(--paper-mid); }
-.contact-inner {
-  max-width: 640px;
-}
-.contact-inner p {
-  font-size: 18px;
-  color: var(--ink-soft);
-  line-height: 1.75;
-  margin-bottom: 32px;
-}
-.contact-link {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 22px;
-  color: var(--oxblood);
-  border-bottom: 1px solid var(--oxblood);
-  padding-bottom: 3px;
-  transition: color var(--transition), border-color var(--transition);
-}
-.contact-link:hover { color: var(--gold-hi); border-color: var(--gold-hi); }
-
-/* ─── FOOTER ──────────────────────────────────── */
-footer {
-  background: var(--wood);
-  border-top: 4px solid var(--gold);
-  padding: 44px clamp(20px,5vw,60px);
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 16px;
-}
-.footer-brand {
-  font-family: 'Cinzel', serif;
-  font-size: 13px; letter-spacing: .2em;
-  color: var(--gold-pale);
-}
-.footer-note {
-  font-family: 'Cinzel', serif;
-  font-size: 10px; letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--paper-dark); opacity: .5;
-}
-
-/* ─── BACK TO TOP ─────────────────────────────── */
-#back-to-top {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 48px; height: 48px;
-  background: var(--wood-mid);
-  border: 2px solid var(--gold);
-  color: var(--gold-hi);
-  font-size: 18px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  box-shadow: 0 4px 14px var(--shadow);
-  opacity: 0; pointer-events: none;
-  transform: translateY(10px);
-  transition: opacity var(--transition), transform var(--transition), background var(--transition);
-  z-index: 90;
-}
-#back-to-top.show { opacity: 1; pointer-events: all; transform: translateY(0); }
-#back-to-top:hover { background: var(--oxblood); border-color: var(--oxblood-hi); }
-
-/* ─── FADE-IN ─────────────────────────────────── */
-.reveal {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity .65s ease, transform .65s ease;
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-delay-1 { transition-delay: .1s; }
-.reveal-delay-2 { transition-delay: .2s; }
-.reveal-delay-3 { transition-delay: .3s; }
-
-/* ─── DIVIDER ─────────────────────────────────── */
-.ornament {
-  display: flex; align-items: center; gap: 16px;
-  color: var(--gold); font-size: 16px;
-  margin: -20px 0 48px;
-}
-.ornament::before, .ornament::after {
-  content: ""; flex: 1; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold));
-  opacity: .35;
-}
-.ornament::after { background: linear-gradient(90deg, var(--gold), transparent); }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; animation: none !important; }
-  .reveal { opacity: 1; transform: none; }
+footer{
+  border-top:3px double var(--ink);
+  padding:22px clamp(20px,5vw,56px);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-faint);
+  text-transform:uppercase; letter-spacing:.04em;
 }
 </style>
 </head>
 <body>
 
-<!-- PROGRESS BAR -->
-<div id="progress-bar"></div>
-
-<!-- NAV -->
-<nav id="site-nav">
-  <span class="nav-brand">Being Beyond</span>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#sayings" data-section="sayings">Sayings</a></li>
-    <li><a href="#writings" data-section="writings">Writings</a></li>
-    <li><a href="#about" data-section="about">About</a></li>
-    <li><a href="#contact" data-section="contact">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <button id="theme-toggle" title="Toggle theme">☽</button>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
+<header>
+  <div class="masthead-row">
+    <span class="masthead-name">Anupam Mahatra</span>
+    <span class="masthead-tag">Working Papers &middot; Metaphysics &amp; Epistemology</span>
   </div>
-</nav>
+  <nav>
+    <a href="#papers">Papers</a>
+    <a href="#log">Reading Log</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-<!-- HERO -->
-<section id="hero">
-  <div>
-    <div class="hero-eyebrow">Est. 2026 · Personal Archive</div>
-    <h1 class="hero-title">Being<br><em>Beyond</em></h1>
-    <p class="hero-tagline">A quiet place for essays, notes, and questions that don't resolve easily — written in Nepali and English, on presence, the self, and what we carry without knowing.</p>
-    <a href="#writings" class="hero-cta">Read the Writing ↓</a>
+<div id="quotes">
+  <div class="quote-track" id="quoteTrack">
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">Man is a mystery: it needs to be unraveled.</p>
+      <div class="quote-attr">Fyodor Dostoevsky <span>&middot; letter to his brother, 1839</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">In the midst of winter, I found there was, within me, an invincible summer.</p>
+      <div class="quote-attr">Albert Camus <span>&middot; Return to Tipasa</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">A book must be the axe for the frozen sea within us.</p>
+      <div class="quote-attr">Franz Kafka <span>&middot; letter to Oskar Pollak, 1904</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">He who has a why to live can bear almost any how.</p>
+      <div class="quote-attr">Friedrich Nietzsche <span>&middot; Twilight of the Idols</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">The limits of my language mean the limits of my world.</p>
+      <div class="quote-attr">Ludwig Wittgenstein <span>&middot; Tractatus Logico-Philosophicus</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">I think, therefore I am.</p>
+      <div class="quote-attr">Ren&eacute; Descartes <span>&middot; Discourse on the Method</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">Reason is, and ought only to be, the slave of the passions.</p>
+      <div class="quote-attr">David Hume <span>&middot; A Treatise of Human Nature</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">No man's knowledge here can go beyond his experience.</p>
+      <div class="quote-attr">John Locke <span>&middot; An Essay Concerning Human Understanding</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">No man ever steps in the same river twice.</p>
+      <div class="quote-attr">Heraclitus <span>&middot; fragment, c. 500 BCE</span></div>
+    </div>
+
+    <div class="quote-slide">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">The only true wisdom is in knowing you know nothing.</p>
+      <div class="quote-attr">Socrates <span>&middot; as recorded by Plato</span></div>
+    </div>
+
   </div>
-  <div class="hero-scroll-hint">Scroll</div>
+  <div class="quote-controls">
+    <span class="quote-nav" id="quotePrev">&larr;</span>
+    <span class="quote-dot active" data-i="0"></span>
+    <span class="quote-dot" data-i="1"></span>
+    <span class="quote-dot" data-i="2"></span>
+    <span class="quote-dot" data-i="3"></span>
+    <span class="quote-dot" data-i="4"></span>
+    <span class="quote-dot" data-i="5"></span>
+    <span class="quote-dot" data-i="6"></span>
+    <span class="quote-dot" data-i="7"></span>
+    <span class="quote-dot" data-i="8"></span>
+    <span class="quote-dot" data-i="9"></span>
+    <span class="quote-nav" id="quoteNext">&rarr;</span>
+  </div>
+</div>
+
+<section id="intro">
+  <div class="eyebrow">Research Statement</div>
+  <h1>The metaphysical status of reality: between mind-independent existence and conscious construction.</h1>
+  <p>The working question behind this site is whether reality is there regardless of any observer, or whether what we call "reality" is, at least in part, structured by the fact that something is conscious of it. This isn't a new question &mdash; it's the line running from Kant's distinction between the thing-in-itself and appearance, through the realism/idealism debates it provoked, into contemporary arguments about whether perception reveals a mind-independent world or partly constructs the one we take ourselves to be perceiving. The papers here work that question from specific angles rather than trying to settle it in general: personal identity and free will are both, underneath, questions about how much of what looks like a fixed fact about a person is actually observer-dependent.</p>
+  <p>Each paper is built the same way: one claim, stated once, defended against the strongest objection available, in dialogue with the actual literature rather than in isolation from it. Nothing here is meant to stand as a finished position &mdash; it's meant to be read the way a philosophy paper is read, by someone looking for where it breaks.</p>
 </section>
 
-<div class="site-body">
+<section id="papers">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">Papers</h2>
+    <span class="sec-sub">0 published</span>
+  </div>
+  <p style="font-style:italic;color:var(--ink-soft);font-size:16px;max-width:640px;margin:-10px 0 26px;">Sorted by whether the paper argues about what exists (Metaphysics) or about what can be known of it (Epistemology) — both in service of the same underlying question above.</p>
 
-  <!-- SAYINGS CAROUSEL -->
-  <section id="sayings">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Words</div>
-      <h2 class="section-title">Sayings</h2>
-    </div>
-    <div class="ornament reveal">❧</div>
-    <div class="saying-carousel reveal">
-      <button class="saying-arrow prev" id="sayPrev">‹</button>
-      <button class="saying-arrow next" id="sayNext">›</button>
-      <div class="saying-track" id="sayingTrack">
+  <div class="cat-bar" id="catBar">
+    <button class="cat-btn active" data-cat="all">All</button>
+    <button class="cat-btn" data-cat="metaphysics">Metaphysics</button>
+    <button class="cat-btn" data-cat="epistemology">Epistemology</button>
+  </div>
 
-        <div class="saying-slide">
-          <p class="saying-text">The present is a weapon already in our hands, and still, despite being usable, we stand far from it.</p>
-          <span class="saying-lang">English</span>
+  <!--
+    TEMPLATE — copy into #paperList to publish a paper.
+    data-cat is "metaphysics" or "epistemology". Give paper-detail
+    a unique id matching the paper-toggle's data-target.
+
+    <article class="paper" data-cat="metaphysics">
+      <div class="paper-id">wp&#47;01<span>meta</span></div>
+      <div>
+        <span class="paper-tag status-draft">Draft</span>
+        <h3 class="paper-title">Article Title</h3>
+        <p class="paper-abstract">One or two sentences — the claim the piece argues for.</p>
+        <div class="paper-meta">
+          <span>Metaphysics</span>
+          <span>8 min read</span>
+          <span class="paper-toggle" data-target="mph01">Expand</span>
         </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">Inside every one of us is an unsprouted seed that never became a tree. It simply rots where it sits.</p>
-          <span class="saying-lang">English</span>
-        </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">मन एक सङ्कलन मात्र हो। सत्यको खोजी नगरौँ — त्यसले सत्यको चाहना गर्छ।</p>
-          <span class="saying-lang">नेपाली</span>
-        </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">A person never meets himself in a crowd. In separateness, he meets himself most completely.</p>
-          <span class="saying-lang">English</span>
-        </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">शिशुमा न त बुझाइ हुन्छ, न त दृष्टिकोण, केवल एक हेराइ र विस्मयता हुन्छ।</p>
-          <span class="saying-lang">नेपाली</span>
-        </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">Knowing is born either from not knowing, or from refusal. There is no third door.</p>
-          <span class="saying-lang">English</span>
-        </div>
-
-        <div class="saying-slide">
-          <p class="saying-text">स्वतन्त्रता केवल धेरै विकल्प हुनु मात्र होइन, आफूलाई चिन्न सक्नु हो।</p>
-          <span class="saying-lang">नेपाली</span>
-        </div>
-
-      </div>
-      <div class="saying-nav" id="sayingDots"></div>
-    </div>
-  </section>
-
-  <!-- WRITINGS -->
-  <section id="writings">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Blog</div>
-      <h2 class="section-title">Writings</h2>
-    </div>
-    <div class="ornament reveal">❧</div>
-
-    <!-- Featured -->
-    <div class="featured-post reveal" id="feat-1" data-category="essay">
-      <div class="featured-image">
-        <div class="featured-image-pattern"></div>
-        <div class="featured-image-inner">प्र</div>
-      </div>
-      <div class="featured-body">
-        <div>
-          <span class="featured-tag">Essay · Featured</span>
-          <h3 class="featured-title">To Be Is Not the Future; It Is Presence</h3>
-          <p class="featured-excerpt">We carry a kind of foreknowledge about the state of "being." Whenever something becomes foreknown, its weight begins to fade. Once familiar, we lose the beauty that lived inside that moment. The present is already in our hands — and yet we stand far from it.</p>
-        </div>
-        <div>
-          <div class="featured-meta">
-            <span>3 Jan 2026 · 4 min read</span>
-            <span class="read-more-link">Read</span>
+        <div class="paper-detail" id="mph01">
+          <div class="paper-detail-block">
+            <span class="paper-detail-label">Claim</span>
+            <p>Written as prose.</p>
           </div>
         </div>
       </div>
+    </article>
+  -->
+
+  <div class="listing" id="paperList">
+    <div class="paper-empty">Nothing published here yet. Papers will appear as they're written.</div>
+  </div>
+</section>
+
+<section id="log">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">Reading Log</h2>
+    <span class="sec-sub">running record</span>
+  </div>
+  <div class="log-list">
+    <div class="paper-empty">Nothing logged yet.</div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">About</h2>
+  </div>
+  <div class="about-grid">
+    <div>
+      <p>I came to philosophy from IT, with a postgraduate focus on cybersecurity, and I'm currently completing a master's in the same field. The move isn't a rejection of that training — it's the same instinct for exact, defensible claims, redirected at a different set of questions, and this archive is where that standard gets tested in public: short papers, one claim each, defended against the best objection I could find, posted only once they're ready to be disagreed with.</p>
+      <p>Two earlier manuscripts, <em>I &mdash; The Unseen Truth</em> and an unfinished Nepali work, sit outside this site's scope. They're reflective rather than argued, and were written before formal exposure to the discipline. The papers above are the newer and more relevant body of work.</p>
     </div>
-
-    <!-- Controls -->
-    <div class="blog-controls reveal">
-      <div class="filter-group">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="essay">Essays</button>
-        <button class="filter-btn" data-filter="notes">Notes</button>
-        <button class="filter-btn" data-filter="nepali">नेपाली</button>
-      </div>
-      <div class="search-box">
-        <input type="text" id="blog-search" placeholder="Search writings…">
-      </div>
+    <div class="about-side">
+      <div class="about-side-row"><span>Target field</span><span>Metaphysics &amp; Epistemology</span></div>
+      <div class="about-side-row"><span>Current study</span><span>MSc IT (in progress)</span></div>
+      <div class="about-side-row"><span>Prior study</span><span>PG, Cybersecurity</span></div>
+      <div class="about-side-row"><span>Contact</span><a href="mailto:anupam.mahatra108@gmail.com">Email</a></div>
     </div>
+  </div>
+</section>
 
-    <!-- Grid -->
-    <div class="post-grid" id="postGrid">
-
-      <article class="post-card reveal" data-category="essay">
-        <div class="post-card-header">
-          <span class="post-tag">Essay</span>
-          <h4 class="post-card-title">Man Dies Alongside His Own Possibility</h4>
-        </div>
-        <p class="post-excerpt">On the walls we build against fear that become our own cages, and the seed in us that never became a tree.</p>
-        <div class="post-full" id="pf1">
-          <p>A man without being fully a man is closer to a corpse. Even standing in an open world, he spends his life inside the chains of a world he built himself. Most of the time we don't make decisions out of hesitation — or we make very few. Inside every one of us is an unsprouted seed that never became a tree. It simply rots where it sits.</p>
-          <p>Fear is one of the central elements here, and it is more frightening than we admit. Fear brings loneliness. But that loneliness isn't the absence of company; it's separation from everything. A person never meets himself in a crowd. In separateness, he meets himself most completely. But the mind turns the feeling of solitude into a lack, and fear is born from that turn.</p>
-          <p>Possibility, here, means the chance to know oneself. Becoming something — anything — is easy enough in a life. But is a life lived without ever knowing oneself truly worth living? Even a tree is alive, and it lives out its life in the full possibility of what it is. And us? We only try to get through it — however it comes, sorrow or joy.</p>
-        </div>
-        <div class="post-card-footer">
-          <span class="post-meta">22 Jan 2026 · 7 min</span>
-          <button class="expand-btn" data-target="pf1">Read ↓</button>
-        </div>
-      </article>
-
-      <article class="post-card reveal reveal-delay-1" data-category="notes">
-        <div class="post-card-header">
-          <span class="post-tag">Notes</span>
-          <h4 class="post-card-title">Refusal</h4>
-        </div>
-        <p class="post-excerpt">A short note on acceptance, refusal, and how knowing is born from one or the other.</p>
-        <div class="post-full" id="pf2">
-          <p>Why? Refusal. Change, in difference, comes from refusal. Acceptance? That isn't even a reality of its own. Acceptance is only the description of a state — the state that arises when one's natural way of being happens to fall in step with morality. Truth, if anything, is closer to refusal.</p>
-          <p>What is the substance of understanding and belief? That color is green. I saw it and called it real. I didn't believe it — I called it green because I was taught that's what it's called. It might even be wrong, but that's only my understanding. My own personal reality and understanding turn out, in the end, to rest entirely on refusal.</p>
-        </div>
-        <div class="post-card-footer">
-          <span class="post-meta">2 Mar 2026 · 2 min</span>
-          <button class="expand-btn" data-target="pf2">Read ↓</button>
-        </div>
-      </article>
-
-      <article class="post-card reveal reveal-delay-2" data-category="nepali">
-        <div class="post-card-header">
-          <span class="post-tag">नेपाली · Notes</span>
-          <h4 class="post-card-title">शिशु संसार बाँड्दैन; संसारले शिशुलाई बाँड्छ</h4>
-        </div>
-        <p class="post-excerpt">पहिचान, छनोट र शिशुको अनिर्मित अवस्थामाथि छोटो चिन्तन।</p>
-        <div class="post-full" id="pf3">
-          <p>पहिचान, अस्तित्वमा रहने एउटा लेबल हो। यो जन्मसँगै आउँदैन, दिइन्छ। संसारमा स्वीकार्य हुनका लागि छनोट गर्ने कौशल र क्षमता अनिवार्य हुन्छ। तर बिडम्बना यस्तो छ कि बाहिरी संसारमा छनोट गर्दै जाँदा भित्र आफ्नै स्वरूपसँग सम्झौता गर्न थालिन्छ।</p>
-          <p>शिशुको अवस्था अनिर्मित, शुद्ध अवस्था हो। शिशुमा न त बुझाइ हुन्छ, न त दृष्टिकोण, केवल एक हेराइ र विस्मयता हुन्छ। संसारको रीत यस्तै हो भन्ने धारणाले हामीलाई ढाकेर सुताइरहन्छ, जसले गर्दा जाग्ने अवसर कम हुँदै जान्छ।</p>
-        </div>
-        <div class="post-card-footer">
-          <span class="post-meta">१४ फेब्रुअरी २०२६ · ३ मिनेट</span>
-          <button class="expand-btn" data-target="pf3">पढ्नुस् ↓</button>
-        </div>
-      </article>
-
-      <article class="post-card reveal reveal-delay-3" data-category="nepali">
-        <div class="post-card-header">
-          <span class="post-tag">नेपाली · Essay</span>
-          <h4 class="post-card-title">जन्जीर</h4>
-        </div>
-        <p class="post-excerpt">पहिचान, स्वीकृतिको डर, र आफैं बनाएको पर्खालमाथि।</p>
-        <div class="post-full" id="pf4">
-          <p>के म कैदी हुँ कि म कसैको बनावटी परिभाषाभित्रै आफ्नो संसारको रचना गरूँ? चाहिँदैन मलाई कुनै परिभाषा, चाहिँदैन मलाई कुनै अन्तर्दृष्टि। छैन मभित्र केही हेर्नका लागि। मलाई चाहिँदैन मेरो पहिचान। म आफैंमै पर्याप्त छु।</p>
-          <p>केको डर–त्रास छ यहाँ? स्वीकृतिको? कसको स्वीकृति, जो आफैंमा अपर्याप्त छ? खुला ठाउँको यति डर भयो कि छानो हाल्न हामीले अनेकौँ निश्चितताका पर्खाल बनायौँ, तर सास फेर्ने सानो प्वाल नै छोडेनौँ।</p>
-        </div>
-        <div class="post-card-footer">
-          <span class="post-meta">१ अप्रिल २०२६ · ५ मिनेट</span>
-          <button class="expand-btn" data-target="pf4">पढ्नुस् ↓</button>
-        </div>
-      </article>
-
-      <article class="post-card reveal" data-category="notes">
-        <div class="post-card-header">
-          <span class="post-tag">Notes</span>
-          <h4 class="post-card-title">Affair with Life</h4>
-        </div>
-        <p class="post-excerpt">Wisdom comes out of fear of uncertainty. Humanity doesn't need wisdom but the eyes to behold the beauty of presence.</p>
-        <div class="post-full" id="pf5">
-          <p>Wisdom comes out of fear of uncertainty. Humanity doesn't need wisdom but the eyes to behold the beauty of presence. Not the one that thought forces it into, but an instant perception without seeking pleasure from it.</p>
-          <p>Not wanting to perceive that beauty once again but embracing the moment with it along with the romance and love of being is all that humanity needs.</p>
-          <p>Having an affair with the state of remaining without wanting it to have as a satisfaction, hasten to be one of the greatest love stories everyone could live with.</p>
-        </div>
-        <div class="post-card-footer">
-          <span class="post-meta">Jul 2026 · 1 min</span>
-          <button class="expand-btn" data-target="pf5">Read ↓</button>
-        </div>
-      </article>
-
-    </div>
-    <div class="no-results" id="noResults">No writings match that search.</div>
-
-    </div>
-    <div class="no-results" id="noResults">No writings match that search.</div>
-
-    <!-- Featured post full text modal-like expand -->
-    <div id="feat-full" style="display:none; margin-top:32px; border:1px solid var(--rule); padding:32px; background:var(--paper); font-size:16.5px; line-height:1.85; color:var(--ink);">
-      <p>Have you ever wondered what is actually happening around you, in your own presence? Probably we rarely pay attention at all. We carry a kind of foreknowledge about the state of "being." Whenever something becomes foreknown, its weight begins to fade. Once a situation becomes familiar, we lose the beauty that lived inside that moment.</p>
-      <p>The present is a weapon already in our hands, and still, despite being usable, we stand far from it. Thoughts like "now I will be present," "now I will meditate" — these very intentions push presence back into the future.</p>
-      <p>But the more we turn "being" into something to be achieved, the further we drift from it. A strange thing — we've already claimed the thing that does not exist, while the thing that does exist, we turn into tomorrow's goal. To bring our existence fully into presence: that is our real consciousness.</p>
-      <button id="feat-close" style="margin-top:24px; font-family:'Cinzel',serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--oxblood); border:1px solid var(--oxblood); padding:8px 16px; cursor:pointer; background:none;">Close ↑</button>
-    </div>
-
-  </section>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Who</div>
-      <h2 class="section-title">About</h2>
-    </div>
-    <div class="ornament reveal">❧</div>
-    <div class="about-layout">
-      <div class="about-portrait reveal">
-        <div class="portrait-frame">
-          <span style="font-size:32px; opacity:.3">◈</span>
-          <span class="frame-label">Your Photo Here</span>
-        </div>
-        <div class="ex-libris">
-          <div class="ex-libris-row"><span>Writing in</span><span>Nepali &amp; English</span></div>
-          <div class="ex-libris-row"><span>On</span><span>Presence &amp; the self</span></div>
-          <div class="ex-libris-row"><span>Since</span><span>2026</span></div>
-          <div class="ex-libris-row"><span>Contact</span><a href="mailto:anupam.mahatra108@gmail.com" style="color:var(--oxblood)">✉ Email</a></div>
-        </div>
-      </div>
-      <div class="about-text reveal">
-        <p>Replace this paragraph with your real biography. A few sentences is enough — this is a personal blog, not a formal CV. Tell the reader who you are, what drives the questions in your writing, and what you're building toward.</p>
-        <p>The writing here sits at the intersection of presence, consciousness, and what philosophy actually feels like from the inside — not as a discipline studied, but as a habit of questioning what's inherited. Some pieces come out in English, others in Nepali, depending on which language the thought arrived in first.</p>
-        <p>Longer-term, this archive doubles as the groundwork for graduate study — a running record of the questions that keep returning, written in public so they have to earn their place.</p>
-        <div class="interests">
-          <span class="interest-tag">Philosophy</span>
-          <span class="interest-tag">Self-inquiry</span>
-          <span class="interest-tag">Presence</span>
-          <span class="interest-tag">Psychology</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="section-header reveal">
-      <div class="section-eyebrow">Write to me</div>
-      <h2 class="section-title">Correspondence</h2>
-    </div>
-    <div class="contact-inner reveal">
-      <p>If something here changed your mind, started an argument in your head, or you just want to talk about one of the pieces — write. No newsletter, no notifications, just email.</p>
-      <a href="mailto:anupam.mahatra108@gmail.com" class="contact-link">anupam.mahatra108@gmail.com</a>
-    </div>
-  </section>
-
-</div><!-- end site-body -->
+<section id="contact">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Contact</h2>
+  </div>
+  <p>For comments on any working paper above &mdash; agreement is not required, disagreement is preferred if it's specific.</p>
+  <a class="contact-email" href="mailto:anupam.mahatra108@gmail.com">anupam.mahatra108@gmail.com</a>
+</section>
 
 <footer>
-  <span class="footer-brand">Being Beyond</span>
-  <span class="footer-note">Personal Archive · Est. 2026</span>
+  <span>Anupam Mahatra &middot; Working Papers</span>
+  <span>Updated 2026</span>
 </footer>
 
-<button id="back-to-top" title="Back to top">↑</button>
-
 <script>
-// ── Progress bar ───────────────────────────────
-const bar = document.getElementById('progress-bar');
-function updateProgress(){
-  const d = document.documentElement;
-  const pct = (d.scrollTop / (d.scrollHeight - d.clientHeight)) * 100;
-  bar.style.width = (isNaN(pct) ? 0 : pct) + '%';
-}
-window.addEventListener('scroll', updateProgress, {passive:true});
-
-// ── Nav scroll behaviour ───────────────────────
-const nav = document.getElementById('site-nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 80);
-}, {passive:true});
-
-// ── Hamburger ─────────────────────────────────
-document.getElementById('hamburger').addEventListener('click', function(){
-  document.getElementById('nav-links').classList.toggle('open');
-});
-
-// ── Scrollspy ─────────────────────────────────
-const navAs = document.querySelectorAll('.nav-links a');
-const secIds = ['sayings','writings','about','contact'];
-window.addEventListener('scroll', () => {
-  let cur = secIds[0];
-  secIds.forEach(id => {
-    const el = document.getElementById(id);
-    if(el && window.scrollY >= el.offsetTop - 120) cur = id;
-  });
-  navAs.forEach(a => a.classList.toggle('active', a.dataset.section === cur));
-}, {passive:true});
-
-// ── Theme toggle ───────────────────────────────
-const toggle = document.getElementById('theme-toggle');
-let dark = false;
-toggle.addEventListener('click', () => {
-  dark = !dark;
-  document.body.setAttribute('data-theme', dark ? 'dark' : '');
-  toggle.textContent = dark ? '☀' : '☽';
-});
-
-// ── Back to top ────────────────────────────────
-const btt = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => {
-  btt.classList.toggle('show', window.scrollY > 600);
-}, {passive:true});
-btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-
-// ── Sayings carousel ───────────────────────────
-const track = document.getElementById('sayingTrack');
-const slides = track.querySelectorAll('.saying-slide');
-const dotsEl = document.getElementById('sayingDots');
-let cur = 0;
-slides.forEach((_,i) => {
-  const d = document.createElement('button');
-  d.className = 'saying-dot' + (i===0?' active':'');
-  d.addEventListener('click', () => goTo(i));
-  dotsEl.appendChild(d);
-});
-function goTo(n){
-  cur = (n + slides.length) % slides.length;
-  track.style.transform = `translateX(-${cur*100}%)`;
-  dotsEl.querySelectorAll('.saying-dot').forEach((d,i) => d.classList.toggle('active', i===cur));
-}
-document.getElementById('sayPrev').addEventListener('click', () => goTo(cur-1));
-document.getElementById('sayNext').addEventListener('click', () => goTo(cur+1));
-let autoplay = setInterval(() => goTo(cur+1), 5000);
-track.addEventListener('mouseenter', () => clearInterval(autoplay));
-track.addEventListener('mouseleave', () => { autoplay = setInterval(() => goTo(cur+1), 5000); });
-
-// ── Expand posts ───────────────────────────────
-document.querySelectorAll('.expand-btn').forEach(btn => {
-  btn.addEventListener('click', function(){
-    const target = document.getElementById(this.dataset.target);
-    const isOpen = target.classList.contains('open');
-    document.querySelectorAll('.post-full.open').forEach(el => {
-      el.classList.remove('open');
-      el.previousElementSibling; // reset
+// category filter
+const catBtns = document.querySelectorAll('.cat-btn');
+const papers = document.querySelectorAll('.paper');
+catBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    catBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    papers.forEach(p => {
+      p.classList.toggle('hidden', !(cat === 'all' || p.dataset.cat === cat));
     });
-    document.querySelectorAll('.expand-btn.open').forEach(b => {
-      b.classList.remove('open');
-      b.textContent = b.textContent.includes('नुस्') ? 'पढ्नुस् ↓' : 'Read ↓';
-    });
-    if(!isOpen){
-      target.classList.add('open');
-      this.classList.add('open');
-      this.textContent = this.textContent.includes('नुस्') ? 'बन्द ↑' : 'Close ↑';
-    } else {
-      this.textContent = this.textContent.includes('बन्द') ? 'पढ्नुस् ↓' : 'Read ↓';
-    }
   });
 });
-
-// ── Featured post expand ───────────────────────
-document.getElementById('feat-1').addEventListener('click', function(){
-  const full = document.getElementById('feat-full');
-  full.style.display = full.style.display === 'none' ? 'block' : 'none';
-  if(full.style.display === 'block') full.scrollIntoView({behavior:'smooth', block:'nearest'});
-});
-document.getElementById('feat-close').addEventListener('click', function(e){
-  e.stopPropagation();
-  document.getElementById('feat-full').style.display = 'none';
-});
-
-// ── Filter + search ────────────────────────────
-const filterBtns = document.querySelectorAll('.filter-btn');
-const cards = Array.from(document.querySelectorAll('#postGrid .post-card'));
-let activeFilter = 'all';
-let searchVal = '';
-
-function applyFilters(){
-  let visible = 0;
-  cards.forEach(card => {
-    const cat = card.dataset.category;
-    const text = card.querySelector('.post-card-title').textContent.toLowerCase()
-      + ' ' + card.querySelector('.post-excerpt').textContent.toLowerCase();
-    const matchF = activeFilter === 'all' || cat === activeFilter;
-    const matchS = !searchVal || text.includes(searchVal);
-    card.classList.toggle('hidden', !(matchF && matchS));
-    if(matchF && matchS) visible++;
+// expand/collapse
+document.querySelectorAll('.paper-toggle').forEach(t => {
+  t.addEventListener('click', () => {
+    const target = document.getElementById(t.dataset.target);
+    const open = target.classList.toggle('open');
+    t.textContent = open ? 'Collapse' : 'Expand';
   });
-  document.getElementById('noResults').classList.toggle('show', visible === 0);
+});
+// quote carousel
+const track = document.getElementById('quoteTrack');
+const dots = document.querySelectorAll('.quote-dot');
+let qIndex = 0;
+const qCount = dots.length;
+function showQuote(i){
+  qIndex = (i + qCount) % qCount;
+  track.style.transform = `translateX(-${qIndex * 100}%)`;
+  dots.forEach((d,n) => d.classList.toggle('active', n === qIndex));
 }
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', function(){
-    filterBtns.forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    activeFilter = this.dataset.filter;
-    applyFilters();
-  });
-});
-document.getElementById('blog-search').addEventListener('input', function(){
-  searchVal = this.value.trim().toLowerCase();
-  applyFilters();
-});
-
-// ── Reveal on scroll ───────────────────────────
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
-}, {threshold: 0.1});
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+dots.forEach(d => d.addEventListener('click', () => showQuote(parseInt(d.dataset.i))));
+document.getElementById('quotePrev').addEventListener('click', () => showQuote(qIndex - 1));
+document.getElementById('quoteNext').addEventListener('click', () => showQuote(qIndex + 1));
+let qTimer = setInterval(() => showQuote(qIndex + 1), 7000);
+document.getElementById('quotes').addEventListener('mouseenter', () => clearInterval(qTimer));
+document.getElementById('quotes').addEventListener('mouseleave', () => { qTimer = setInterval(() => showQuote(qIndex + 1), 7000); });
 </script>
 </body>
 </html>
